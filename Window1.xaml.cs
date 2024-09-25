@@ -16,7 +16,7 @@ namespace ToDoList
 {
     public partial class InputDialog : Window
     {
-        public string InputText { get; private set; }
+        public ToDoItem Item { get; private set; }
 
         public InputDialog()
         {
@@ -25,7 +25,12 @@ namespace ToDoList
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            InputText = InputTextBox.Text;
+            Item = new ToDoItem
+            {
+                Text = InputTextBox.Text,
+                CreationDate = DateTime.Now,
+                Priority = (PriorityLevel)PriorityComboBox.SelectedIndex
+            };
             DialogResult = true;
         }
     }

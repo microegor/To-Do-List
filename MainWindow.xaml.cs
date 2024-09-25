@@ -17,9 +17,12 @@ namespace ToDoList
 {
     public partial class MainWindow : Window
     {
+        private ToDoManager toDoManager;
+
         public MainWindow()
         {
             InitializeComponent();
+            toDoManager = new ToDoManager();
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -28,21 +31,25 @@ namespace ToDoList
             InputDialog inputDialog = new InputDialog();
             if (inputDialog.ShowDialog() == true)
             {
-                // Получаем введенный текст
-                string noteText = inputDialog.InputText;
+                // Получаем новый элемент ToDoItem
+                ToDoItem newItem = inputDialog.Item;
+
+                // Добавляем элемент в менеджер
+                toDoManager.AddItem(newItem);
 
                 // Создаем новый Border
                 Border newBorder = new Border
                 {
-                    BorderBrush = System.Windows.Media.Brushes.Black,
+                    BorderBrush = Brushes.Black,
                     BorderThickness = new Thickness(1),
                     Margin = new Thickness(5)
                 };
 
-                // Создаем новый CheckBox с введенным текстом
+                // Создаем новый CheckBox с введенным текстом и приоритетом
                 CheckBox newCheckBox = new CheckBox
                 {
-                    Content = noteText
+                    Content = $"{newItem.Text} ({newItem.Priority})",
+                    Tag = newItem // Сохраняем ссылку на элемент ToDoItem в Tag
                 };
 
                 // Добавляем CheckBox в Border
@@ -69,13 +76,20 @@ namespace ToDoList
             if (MainFrame.Content is StackPanel stackPanel)
             {
                 // Создаем список для хранения элементов, которые нужно удалить
-                var itemsToRemove = new System.Collections.Generic.List<UIElement>();
+                var itemsToRemove = new List<UIElement>();
 
                 // Проходим по всем элементам StackPanel
                 foreach (UIElement element in stackPanel.Children)
                 {
                     if (element is Border border && border.Child is CheckBox checkBox && checkBox.IsChecked == true)
                     {
+                        // Получаем элемент ToDoItem из Tag
+                        if (checkBox.Tag is ToDoItem toDoItem)
+                        {
+                            // Удаляем элемент из менеджера
+                            toDoManager.RemoveItem(toDoItem);
+                        }
+
                         // Добавляем элемент в список для удаления
                         itemsToRemove.Add(element);
                     }

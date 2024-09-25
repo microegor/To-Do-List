@@ -4,6 +4,11 @@
         Title="InputDialog" Height="150" Width="300">
     <Grid>
         <TextBox Name="InputTextBox" Margin="10" VerticalAlignment="Top"/>
+        <ComboBox Name="PriorityComboBox" Margin="10,50,10,0" VerticalAlignment="Top" SelectedIndex="1">
+            <ComboBoxItem Content="Low" />
+            <ComboBoxItem Content="Medium" />
+            <ComboBoxItem Content="High" />
+        </ComboBox>
         <Button Content="OK" Width="75" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom" Click="OkButton_Click"/>
     </Grid>
 </Window>
